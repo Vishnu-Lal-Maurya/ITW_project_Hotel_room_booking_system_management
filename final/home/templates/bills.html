@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hotel Invoice</title>
+</head>
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 20px;">
+    <div id="invoice" style="max-width: 800px; margin: 0 auto; border: 1px solid #ccc; padding: 20px;">
+        <h1>My Hotel</h1>
+        <div id="hotel-info" style="text-align: end;">
+            
+            <p>Varanasi</p>
+            <p>Phone: 8488088852</p>
+            <p>Email: vlm@gmail.com</p>
+            <p>Website: MyHotel.com</p>
+        </div>
+
+        <div id="bill-to" style="margin-top: 20px;">
+            <h2>Bill To:</h2>
+            <p>Guest Name: {{user.username}}</p>
+            {% comment %} <p>Address: [Guest Address]</p> {% endcomment %}
+            {% comment %} <p>Phone: [Guest Phone]</p> {% endcomment %}
+            <p>Email: {{user.email}}</p>
+        </div>
+
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid #ccc; background-color: #f2f2f2; padding: 10px;">Room Bookings</th>
+                    <th style="border: 1px solid #ccc; background-color: #f2f2f2; padding: 10px;">Nights</th>
+                    <th style="border: 1px solid #ccc; background-color: #f2f2f2; padding: 10px;">Rate</th>
+                    <th style="border: 1px solid #ccc; background-color: #f2f2f2; padding: 10px;">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="border: 1px solid #ccc; padding: 10px;">{{hotel_booking}}</td>
+                    <td style="border: 1px solid #ccc; padding: 10px;">{{ nights_stayed }}</td>
+                    <td style="border: 1px solid #ccc; padding: 10px;">${{hotel_booking.hotel.hotel_price}}</td>
+                    <td style="border: 1px solid #ccc; padding: 10px;">${{bill.Rent_charges}}</td>
+                </tr>
+            </tbody>
+        </table>
+        {% load custom_filters %}
+
+
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid #ccc; background-color: #f2f2f2; padding: 10px;">Services Booked</th>
+                    <th style="border: 1px solid #ccc; background-color: #f2f2f2; padding: 10px;">Person Counts</th>
+                    <th style="border: 1px solid #ccc; background-color: #f2f2f2; padding: 10px;">Rate</th>
+                    <th style="border: 1px solid #ccc; background-color: #f2f2f2; padding: 10px;">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for service in services %}
+                <tr>
+                    <td style="border: 1px solid #ccc; padding: 10px;">{{service.service.service_name}}</td>
+                    <td style="border: 1px solid #ccc; padding: 10px;">{{service.person_count}}</td>
+                    <td style="border: 1px solid #ccc; padding: 10px;">${{service.service.service_Price}}</td>
+                    <td style="border: 1px solid #ccc; padding: 10px;">${{ service.service.service_Price|mul:service.person_count }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div id="total" style="margin-top: 20px; text-align: right;">
+            <p>Subtotal: ${{bill.Total_charges}}</p>
+            <p>Total Amount Due: ${{bill.Total_charges}}</p>
+        </div>
+
+        <p style="text-align: left;">Payment Method: Pay on Checkout</p>
+        <p style="text-align: left;">Thank you for choosing My Hotel!</p>
+    </div>
+
+    <button onclick="window.print()" style="display: block; margin: 20px auto; padding: 10px 20px; background-color: #007BFF; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Print Invoice</button>
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block start  %}
+
+     
+                <!-- Room Start -->
+                <div class="container-xxl py-5">
+                    <div class="container">
+                        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                            {% if bookings %}
+                            <h3 class="section-title text-center text-primary text-uppercase">Your Bookings</h3>
+                            {% else %}
+                            <h3 class="section-title text-center text-primary text-uppercase">You Don't have any bookings</h3>
+                            {% endif %}
+                            <br>
+                            <br>
+                        </div>
+                        <div class="row g-4">
+                            {% for booking_obj in bookings %}
+                            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s"  class="card mt-3">
+                                <div class="card">
+                                    <div class="position-relative">
+                                        <img class="img-fluid" src="/static/{{booking_obj.hotel.hotel_images.first.images}}" style=" width:500px; height:250px;" alt="">
+                                        <small class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4">&#8377 {{booking_obj.hotel.hotel_price}}/Night</small>
+                                    </div>                                   
+                                     {% comment %} <div class="card-body">
+                                        <h5 class="card-title">{{booking_obj.hotel.hotel_name}}</h5>
+                                        
+                                    </div> {% endcomment %}
+                                    
+                                
+                                    <ul class="list-group list-group-flush">
+                                        <br>
+                                       <h6> <li class="list-group-item">Room {{booking_obj.hotel.hotel_name}} {{booking_obj.room_nu.room_no}}</li>   </h6> 
+                                    
+                                    {% comment %} <div class="card-body"> {% endcomment %}
+                                    <li class="list-group-item">
+                                        <p class="card-text">
+                                            <h6>Booked from</h6> <span class="text-primary">{{booking_obj.start_date}}</span> - <span class="text-primary">{{booking_obj.end_date}}</span>
+                                        </p>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <p class="card-text">
+                                            <h6>Booked Services</h6> 
+                                            <ul>
+                                            {% for service_obj in booking_obj.service_booking.all %}
+                                            <li>{{service_obj.service.service_name}}</li>
+                                            {% endfor %}
+
+                                        </p>
+                                    </li>
+                                   
+                                </ul>
+                                    {% comment %} </div> {% endcomment %}
+                                    <hr>
+                                    <div class="card-body">
+                                       
+                                            <form method="post" enctype="multipart/form-data">
+                                                {% csrf_token %}
+                                                <div class="d-flex justify-content-between">
+                                                      <a class="btn btn-sm btn-dark rounded py-2 px-4" href="/generate_bill/{{booking_obj.uid}}/">Generate Bill</a>
+                                                </div>
+                                            </form>
+                                       
+                                    </div>
+
+                                </div>
+                            
+                                {% comment %} <!-- Card for Amenities -->
+                                <div class="card mt-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Amenities</h5>
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <i class="fa fa-wifi {% if booking_obj.hotel.hotel_amenities.first.has_free_wifi %}text-success{% else %}text-danger{% endif %}"></i> WiFi
+                                            </li>
+                                            <li class="list-group-item">
+                                                <i class="fa fa-dumbbell {% if booking_obj.hotel.hotel_amenities.first.has_gym %}text-success{% else %}text-danger{% endif %}"></i> Gym
+                                            </li>
+                                            <li class="list-group-item">
+                                                <i class="fa fa-swimmer {% if booking_obj.hotel.hotel_amenities.first.has_swimming_pool %}text-success{% else %}text-danger{% endif %}"></i> Swimming Pool
+                                            </li>
+                                                            <!-- Room Count Amenity -->
+                                            <li class="list-group-item">
+                                                <i class="fa fa-bed {% if booking_obj.hotel.hotel_amenities.first.c_bed_room > 0 %}text-success{% else %}text-danger{% endif %}"></i> Room Count: {{ booking_obj.hotel.hotel_amenities.first.c_bed_room }}
+                                             </li>
+                                            <!-- Bathroom Count Amenity -->
+                                            <li class="list-group-item">
+                                                <i class="fa fa-bath {% if booking_obj.hotel.hotel_amenities.first.c_bath_room > 0 %}text-success{% else %}text-danger{% endif %}"></i> Bathroom Count: {{ booking_obj.hotel.hotel_amenities.first.c_bath_room }}
+                                            </li>
+                                                                   
+                                        </ul>
+                                    </div>
+                                </div> {% endcomment %}
+                            </div>
+                            
+                            
+                            {% endfor %}
+                            
+                        </div>
+                    </div>
+                </div>
+                <!-- Room End -->
+
+
+
+        
+{% endblock %}

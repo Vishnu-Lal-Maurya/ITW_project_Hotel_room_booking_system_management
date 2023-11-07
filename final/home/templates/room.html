@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block start  %}
+
+
+        {% comment %} <!-- Page Header Start -->
+        <div class="container-fluid page-header mb-5 p-0" style="background-image: url(/static/img/carousel-1.jpg);">
+            <div class="container-fluid page-header-inner py-5">
+                <div class="container text-center pb-5">
+                    <h1 class="display-3 text-white mb-3 animated slideInDown">Rooms</h1>
+ 
+                </div>
+            </div>
+        </div>
+        <!-- Page Header End --> {% endcomment %}
+    <form method="POST">
+            {% csrf_token %} 
+        <div style="text-align: right; margin-bottom: 20px;">
+            <label for="sort" style="font-weight: bold;">Sort by:</label>
+            <select id="sort"   name="sort_by" style="padding: 5px;">
+              <option name="price" value="price">Price</option>
+              <option name="ratimg" value="rating">Rating</option>
+            </select>
+            <button   class="bg-primary;" style="padding: 5px 10px; background-color: #f5a717; color: #fff; border: none; cursor: pointer;" type="submit">Sort</button>
+          </div>
+    </form>
+
+
+
+        <!-- Room Start -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                    <h6 class="section-title text-center text-primary text-uppercase">Our Rooms</h6>
+                    <h1 class="mb-5">Explore Our <span class="text-primary text-uppercase">Rooms</span></h1>
+                </div>
+                <div class="row g-4">
+                    {% for hotels_obj in hotel_obj %}
+                    <div class="col-lg-4 col-md-6 wow fadeInUp shadow-lg" data-wow-delay="0.1s" style="border-radius:10px;">
+                        <div class="room-item shadow rounded overflow-hidden" style="border-radius:10px;">
+                            <div class="position-relative">
+                                <img class="img-fluid" src="/static/{{hotels_obj.hotel_images.first.images}}" style=" width:500px; height:250px;" alt="">
+                                <small class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4">${{hotels_obj.hotel_price}}/Night</small>
+                            </div>
+                            <div class="p-4 mt-2">
+                                <div class="d-flex justify-content-between mb-3">
+                                    <h5 class="mb-0">{{hotels_obj.hotel_name}}</h5>
+                                    <div class="ps-2">
+                                        {% load custom_filters %}
+
+                                        {% with rating=hotels_obj.hotel_amenities.first.rating %}
+                                            {% for x in rating|get_range %}
+                                                <small class="fa fa-star text-primary"></small>
+                                            {% endfor %}
+
+                                        {% endwith %} 
+
+                                    </div>
+                                </div>
+                                <div class="d-flex mb-3">
+                                    <small class="border-end me-3 pe-3"><i class="fa fa-bed text-primary me-2"></i>{{hotels_obj.hotel_amenities.first.c_bed_room}} Bed</small>
+                                    <small class="border-end me-3 pe-3"><i class="fa fa-bath text-primary me-2"></i>{{hotels_obj.hotel_amenities.first.c_bath_room}} Bath</small>
+                                    
+                                </div>
+                                <div class="d-flex mb-3">
+                                    {% if hotels_obj.hotel_amenities.first.has_free_wifi %}
+                                    <small class="border-end me-3 pe-3"><i class="fa fa-wifi text-primary me-2"></i>Wifi</small>
+                                    {% else %}
+                                    <small class="border-end me-3 pe-3"><i class="fa fa-wifi text-danger me-2"></i>Wifi</small>
+                                    {% endif %}
+                                    {% if hotels_obj.hotel_amenities.first.has_gym %}
+                                    <small class="border-end me-3 pe-3"><i class="fa fa-dumbbell text-primary me-2"></i>Gym</small>
+                                    {% else %}
+                                    <small class="border-end me-3 pe-3"><i class="fa fa-dumbbell text-danger me-2"></i>Gym</small>
+                                    {% endif %}
+                                    {% if hotels_obj.hotel_amenities.first.has_swimming_pool %}
+                                    <small class="border-end me-3 pe-3"><i class="fa fa-swimmer text-primary me-2"></i>Swim</small>
+                                    {% else %}
+                                    <small class="border-end me-3 pe-3"><i class="fa fa-swimmer text-danger me-2"></i>Swim</small>
+                                    {% endif %}
+                                </div>
+
+                                <p class="text-body mb-3">{{hotels_obj.descr}}</p>
+                                <div class="d-flex justify-content-between">
+                                    <a class="btn btn-sm btn-dark rounded py-2 px-4" href="/book_hotel/{{hotels_obj.uid}}/" >Book Now</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card for Amenities -->
+                        <div class="card mt-3" data-wow-delay="0.1s">
+                            <div class="card-body">
+                                <h5 class="card-title">Amenities</h5>
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <i class="fa fa-wifi {% if hotels_obj.hotel_amenities.first.has_free_wifi %}text-success{% else %}text-danger{% endif %}"></i> WiFi
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="fa fa-dumbbell {% if hotels_obj.hotel_amenities.first.has_gym %}text-success{% else %}text-danger{% endif %}"></i> Gym
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="fa fa-swimmer {% if hotels_obj.hotel_amenities.first.has_swimming_pool %}text-success{% else %}text-danger{% endif %}"></i> Swimming Pool
+                                    </li>
+                                                    <!-- Room Count Amenity -->
+                                    <li class="list-group-item">
+                                        <i class="fa fa-bed {% if hotels_obj.hotel_amenities.first.c_bed_room > 0 %}text-success{% else %}text-danger{% endif %}"></i> Room Count: {{ hotels_obj.hotel.hotel_amenities.first.c_bed_room }}
+                                     </li>
+                                    <!-- Bathroom Count Amenity -->
+                                    <li class="list-group-item">
+                                        <i class="fa fa-bath {% if hotels_obj.hotel_amenities.first.c_bath_room > 0 %}text-success{% else %}text-danger{% endif %}"></i> Bathroom Count: {{ hotels_obj.hotel.hotel_amenities.first.c_bath_room }}
+                                    </li>
+                                                           
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                </div>
+            </div>
+            <br>
+            <br>
+
+
+
+<div class="container"  data-wow-delay="2s" >
+    <nav aria-label="..." data-wow-delay="2s">
+        {% if hotel_obj.has_other_pages %}
+      <ul class="pagination pagination-lg justify-content-end" data-wow-delay="2s">
+        {% for i in hotel_obj.paginator.page_range %}
+
+        {% if i == hotel_obj.number %}
+        <li class="page-item active" aria-current="page">
+          <span class="page-link">{{i}}</span>
+        </li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+        {% endif %}
+
+        {% endfor %}
+    </ul>
+    {% endif %}
+    </nav>
+  </div>
+        </div>  
+        <!-- Room End -->
+
+
+
+        <br>
+        <br>
+{% endblock %}

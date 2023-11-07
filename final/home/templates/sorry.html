@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block start  %}
+
+<div style="font-family: Arial, sans-serif; text-align: center;">
+
+    <div style=" border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); margin: 50px auto; padding: 20px; max-width: 400px;">
+        <h1 style="color: #333;">Sorry!</h1>
+        <p style="font-size: 18px; color: #555;">Rooms already booked for in these dates.</p>
+        <p style="font-size: 24px; color: #0074a4; margin-bottom: 20px;">Sorry for your inconvinience.</p>
+        <a href="/" style="display: inline-block; padding: 10px 20px; background-color: #0074a4; color: #fff; text-decoration: none; border-radius: 5px;" onmouseover="this.style.backgroundColor='#005782'" onmouseout="this.style.backgroundColor='#0074a4'">Back To Home</a>
+    </div>
+
+</div>
+
+
+
+{% endblock %}
